@@ -10,23 +10,14 @@ namespace NumeroBinario
     {
         static string ConvertirBinario(int numero)
         {
-            string binario = "";
-            int cuadrado = 8;
-
-            for (int i = 0; i < 4; i++)
+            string numeroBinario = "";
+            for (int i = numero; i > 0; i /= 2)
             {
-                if (numero >= cuadrado)
-                {
-                    binario += "1";
-                    numero -= cuadrado;
-                }
-                else
-                {
-                    binario += "0";
-                }
-                cuadrado = cuadrado / 2;
+                int remainder = i % 2;
+                numeroBinario = remainder + numeroBinario;
             }
-            return binario;
+
+            return numeroBinario;
         }
         static void Main(string[] args)
         {
