@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <label for="txtIdEmpleado">Numero</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <input type="text" class="form-control soloNumero" id="txtNumero" placeholder="Ingrese un numero entero" />
+            <span class="field-validation-valid error text-danger" data-valmsg-for="Numero" data-valmsg-replace="true" id="lblAlertaNumero"></span>
+        </div>
+        <div class="col-3">
+            <button type="button" class="btn btn-primary" id="btnGenerarTabla">Generar tabla </button>
+        </div>
+    </div>
+    <hr />
+    <table class="" id="tabla">
+    </table>
+
+    <br />
+
+    <div class="row">
+        <div class="col-3">
+            <input type="text" class="form-control" id="positionDisplay" readonly placeholder="Posición del botón" disabled="disabled">
+        </div>
+    </div>
+
+</div>
+
+
+@Scripts.Render("~/bundles/jquery")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnGenerarTabla').click(function () {
+            var numero = parseInt($('#txtNumero').val());
+
+            var html = '';
+            for (var i = 1; i <= numero; i++) {
+                html += '<tr>';
+                for (var j = 1; j <= numero; j++) {
+                    html += '<td><button class="btn btn-primary" data-row="'+i+'" data-col="'+j+'">Button</button></td>';
+                }
+                html += '</tr>';
+            }
+            $('#tabla').html(html);
+        });
+
+        $('#tabla').on('click', 'button', function () {
+            var row = $(this).data('row');
+            var col = $(this).data('col');
+            $('#positionDisplay').val('Columna: '+col +', Fila: '+ row);
+        });
+
+        $('.soloNumero').on('input', function () {
+            var regex = /^[0-9.]+$/;
+            var input = $(this).val();
+            const btnGenerarTabla = document.getElementById('btnGenerarTabla');
+
+            if (input != "") {
+                if (!regex.test(input) && input != "") {
+                    $(this).val(input.replace(/[^0-9.]/g, ''));
+                    cambioColor($(this), 'No permite letras u otro valor que no sea numero.', $('#lblAlertaNumero'));
+                    btnGenerarTabla.disabled = true;
+                    return false;
+                }
+                else {
+                    $(this).css('border-color', '');
+                    $('#lblAlertaNumero').text('');
+                    btnGenerarTabla.disabled = false;
+                }
+            }
+            else {
+                btnGenerarTabla.disabled = true;
+                cambioColor($(this), 'No puede estar vcaio.', $('#lblAlertaNumero'));
+            }
+        });
+    });
+    function cambioColor(texbox, mensaje, alerta) {
+        texbox.css('border-color', 'red');
+        alerta.text(mensaje);
+    }
+</script>
